@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html lang='en'>
+    <head>
+        <meta charset='UTF-8'>
+        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+        {% block head %}
+
+        {% endblock head%}
+        <title>Trade_IT</title>
+    </head>
+    <body>
+        
+        <a href='{% url 'posts:home' %}'>
+            Home
+        </a>
+
+        <a href='{% url 'users:sign_up' %}'>
+            Sign Up
+        </a>
+        
+        {% block content %}
+
+        {% endblock content%}
+
+    </body>
+</html>

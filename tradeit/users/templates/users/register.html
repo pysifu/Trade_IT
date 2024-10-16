@@ -1,0 +1,22 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block head %}
+
+{% endblock head %}
+
+{% block content %}
+
+<h1> 
+    Sign In to the biggest marketplace in Internet.
+</h1>
+
+<form method='POST'>
+    
+    {% csrf_token %}
+    {{form.as_p}}
+    <input type='submit' value='Create an account!'>
+
+</form>
+{% endblock content %}
+
