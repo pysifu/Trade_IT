@@ -10,13 +10,28 @@
     </head>
     <body>
         
-        <a href='{% url 'posts:home' %}'>
+        <a href="{% url 'posts:home' %}">
             Home
         </a>
+        {% if not user.is_authenticated %}
+            <a href="{% url 'users:sign_up' %}">
+                Sign Up
+            </a>
 
-        <a href='{% url 'users:sign_up' %}'>
-            Sign Up
-        </a>
+            <a href="{% url 'users:login' %}">
+                Login
+            </a>
+        {% else %}
+            <a href="{% url 'users:profile' user.username %}">
+                Profile
+            </a>
+            <a href="{% url 'posts:create_post' %}">
+                Post Item
+            </a>
+            <a href="{% url 'users:logout' %}">
+                Logout
+            </a>
+        {% endif %}
         
         {% block content %}
 

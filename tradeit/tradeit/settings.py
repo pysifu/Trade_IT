@@ -87,7 +87,15 @@ DATABASES = {
             "service": "my_service",
             "passfile": ".my_pgpass",
         },
-    }
+    },
+    # "default":{
+    #     "ENGINE": "django.db.backends.postgresql",
+    #     'HOST':'localhost',
+    #     'PORT':'5432',
+    #     'USER':'postgres',
+    #     'PASSWORD':'root',
+    #     'NAME':'postgres',
+    # }
 }
 
 

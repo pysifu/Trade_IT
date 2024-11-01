@@ -39,9 +39,6 @@ class User(AbstractUser):
     })
     
     objects = UserManager()
-    
-    
-    USERNAME_FIELD='email'
     REQUIRED_FIELDS=['birthday', 'phone_number']
        
 

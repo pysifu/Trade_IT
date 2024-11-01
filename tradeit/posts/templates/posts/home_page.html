@@ -10,4 +10,13 @@
     Welcome to Trade_IT!
 </h1>
 
+{% for object in object_list %}
+    <h1>
+        <a href="{% url 'posts:post' object.slug %}">
+            {{object.slug}}
+            {{object}}
+        </a>
+    </h1>
+{% endfor %}
+
 {% endblock content %}
