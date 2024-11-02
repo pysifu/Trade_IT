@@ -1,5 +1,5 @@
 {% extends 'layout.html' %}
-
+{% load static %}
 {% block head %}
 
 {% endblock head %}
@@ -9,6 +9,8 @@
 <h1>{{object.name}}</h1>
 <h2>{{object.price}}</h2>
 <h3>{{object.category}}</h3>
-{{object.image}}
+{% if object.image %}
+<img src={% static object.image %}>
+{% endif %}
 
 {% endblock content %}

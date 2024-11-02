@@ -7,23 +7,26 @@
 
 {% block content %}
 
-<h1>
-    Welcome to Trade_IT!
-</h1>
 
+<h1>My Posts</h1>
+
+{% if posts %}
 <div class="container text-center">
     <div class="row align-items-start">
-    {% for object in object_list %}
+    {% for post in posts %}
         <div class="col">
-            <h2>{{object}}</h2>
-            <h2>Price: {{object.price}}zł</h2>
-            {% if object.image %}
-                <img src={% static object.image %}>
+            <h2>{{post}}</h2>
+            <h2>Price: {{post.price}}</h2>
+            {% if post.image %}
+                <img src={% static post.image %}>
             {% endif %}
         </div>
     {% endfor %}
     </div>
 </div>
-
+{% else %}
+    <h1>No Items.</h1>
+{% endif %}
 
 {% endblock content %}
+

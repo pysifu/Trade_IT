@@ -19,6 +19,11 @@ class Post(models.Model):
         ('others', 'Others')
     )
     
+    status_choice = (
+        (1, 'Approved'),
+        (0, 'Denied'),
+    )
+    
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, 
                             editable=False)
     slug = models.SlugField(max_length=256, null=False)
@@ -29,6 +34,8 @@ class Post(models.Model):
     category = models.CharField(max_length=16, choices=categories, blank=False,
                                 null=False)
     image = models.ImageField(upload_to='images/', blank=True, null=True)
+    #bool integer // 1 - True // 0 - False // 2 - Pending(none bool)
+    is_approved = models.IntegerField(default=2, choices=status_choice)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
                              blank=False, null=False)
     
