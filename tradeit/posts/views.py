@@ -1,16 +1,24 @@
 from django.views import generic
 from django.views.generic import edit
 from posts.models import Post
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import (
+    LoginRequiredMixin, UserPassesTestMixin, PermissionRequiredMixin)
 from django.urls import reverse_lazy
-from django.shortcuts import get_list_or_404, render
+from django.shortcuts import render
+from posts.mixins import GroupRequiredMixin
 
 # Create your views here.
 
 #List of items on entire marketplace
+#List of items approved on entire marketplace // to do
 class HomeView(generic.ListView):
     model = Post
     template_name = 'posts/home_page.html'
+    
+    def get_queryset(self):
+        print(self.request.META.get('REMOTE_ADDR'))
+        qs = super().get_queryset()
+        return qs.filter(is_approved=1)
     
 
 #Create item by user // only authorized users.
@@ -32,25 +40,63 @@ class CreatePostView(LoginRequiredMixin, edit.CreateView):
 class PostView(LoginRequiredMixin, generic.DetailView):
     model = Post
     template_name = 'posts/post.html'
-    
-# Add Mixins group users staff to be able to perform actions // + CBV
-class ManagePostsView(generic.TemplateView):
-    template_name = 'posts/panel_manage_posts/pending.html'
 
+# Change forbidden 403 and others html
+# Add Mixins group users staff to be able to perform actions // + CBV
+class ListManagePostsView(GroupRequiredMixin, generic.ListView):
+    model = Post
+    group_required = ['superuser', 'staff']
+    template_name = 'posts/panel_management/list.html'
+    
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.filter(is_approved=2)
+
+  
+class HistoryManagePostsView(GroupRequiredMixin, generic.ListView):
+      model = Post
+      group_required = ['staff', 'superuser', 'admin']
+      template_name = 'posts/panel_management/history.html'
+      
+
+#change label of is_approved // to do
+class EditPendingPostView(edit.UpdateView):
+    model = Post
+    template_name = 'posts/panel_management/pending.html'
+    fields = ['is_approved']
+    success_url = reverse_lazy('posts:panel_pendings')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['post'] = Post.objects.get(slug=self.object.slug)
+        return context
+
+#change it to CBV // to do
 #List of items posted by user
 def my_items_view(request):
     posts = Post.objects.filter(user=request.user)
     context = {
         'posts' : posts
     }
-    return render(request, 'posts/my_posts/items.html', context=context)
+    return render(request, 'posts/user/items.html', context=context)
 
 
+class UserPendingItemsView(LoginRequiredMixin, generic.ListView):
+    model = Post
+    template_name = 'posts/user/pending_items.html'
+    
+    def get_queryset(self):
+        qs = super().get_queryset()
+        print(qs.filter(is_approved=2))
+        return qs.filter(is_approved=2)
 
-#user sold items
-def sold_items_view(request):
-    pass
 
-#pending items to approve by administrator // FBV or CBV?
-def pending_items_view(request):
-    pass
+class UserItemsView(LoginRequiredMixin, generic.ListView):
+    model = Post
+    template_name = 'posts/user/items.html'
+    
+    def get_queryset(self):
+        qs = super().get_queryset()
+        print(self.request.user.id)
+        return qs.filter(is_approved=1)
+

@@ -1,0 +1,15 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block head %}
+
+{% endblock head %}
+
+{% block content %}
+
+List View
+
+{% for post in object_list %}
+    <h1><a href="{% url 'posts:panel_edit_pending' post.slug %}">{{post.name}} - {{post.get_is_approved_display}}</a></h1>
+{% endfor %}
+{% endblock content %}

@@ -30,15 +30,26 @@
                   {% if user.is_authenticated %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        My_Posts
+                        Posts
                         </a>
                         <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="{% url 'posts:items' %}">Items</a></li>
-                        <li><a class="dropdown-item" href="#">Waiting_Items</a></li>
+                        <li><a class="dropdown-item" href="{% url 'posts:user_items' %}">My Items</a></li>
+                        <li><a class="dropdown-item" href="{% url 'posts:user_pending_items' %}">Waiting Items</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#">Sold_Items</a></li>
+                        <li><a class="dropdown-item" href="#">Sold Items</a></li>
                         </ul>
                     </li>
+                    {% if user.is_staff or user.is_superuser %}
+                    <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Panel Management
+                      </a>
+                      <ul class="dropdown-menu">
+                      <li><a class="dropdown-item" href="{% url 'posts:panel_pendings' %}">List Pending Posts</a></li>
+                      <li><a class="dropdown-item" href="{% url 'posts:panel_history' %}">History</a></li>
+                      <li><hr class="dropdown-divider"></li>
+                      </ul>
+                    {% endif %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Settings
@@ -50,6 +61,7 @@
                         <li><a class="dropdown-item" href="{% url 'users:sign_out' %}">Sign_Out</a></li>
                         </ul>
                     </li>
+                  </li>
                     <li class="nav-item">
                       <a class="nav-link active" aria-current="page" href="#">Messages</a>
                   </li>

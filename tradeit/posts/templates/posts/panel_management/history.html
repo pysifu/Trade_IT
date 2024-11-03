@@ -1,0 +1,15 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block head %}
+
+{% endblock head %}
+
+
+{% block content %}
+
+{% for post in object_list %}
+    <h1>{{post.name}} - {{post.get_is_approved_display}}</h1>
+{% endfor %}
+
+{% endblock content %}

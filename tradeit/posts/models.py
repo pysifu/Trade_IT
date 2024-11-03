@@ -20,6 +20,7 @@ class Post(models.Model):
     )
     
     status_choice = (
+        (2, 'Pending'),
         (1, 'Approved'),
         (0, 'Denied'),
     )
@@ -48,5 +49,4 @@ class Post(models.Model):
         
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
-        
         return super(Post, self).save(*args, **kwargs)

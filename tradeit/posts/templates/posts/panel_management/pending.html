@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block head %}
+
+{% endblock head %}
+
+{% block content %}
+
+<h1>Name: {{post.name}}</h1>
+<h2>Price: {{post.price}}zł</h2>
+<h2>User: {{post.user}}</h2>
+{% if post.image %}
+<img src={% static post.image %}>
+{% endif %}
+<h1>------------------------</h1>
+<form method='post'>
+    {% csrf_token %}
+    {{form.as_p}}
+    <input type='submit' value='Edit Item'>
+</form>
+
+{% endblock content %}
