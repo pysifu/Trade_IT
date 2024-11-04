@@ -20,6 +20,8 @@
             {% if post.image %}
                 <img src={% static post.image %}>
             {% endif %}
+            <h1>-------</h1>
+            <a href="{% url 'posts:edit_item' post.slug %}"><input type='submit' value='Edit'></a>
         </div>
     {% endfor %}
     </div>

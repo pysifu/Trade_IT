@@ -4,13 +4,10 @@ from django.conf import settings
 from django.urls import reverse
 from django.template.defaultfilters import slugify
 import uuid
-
+from posts.validation import check_slug_unique
 # Create your models here.
 
-
-
 class Post(models.Model):
-    
     categories = (
         ('cars', 'Cars'),
         ('electronics', 'Electronics'),
@@ -18,7 +15,6 @@ class Post(models.Model):
         ('clothes', 'Clothes'),
         ('others', 'Others')
     )
-    
     status_choice = (
         (2, 'Pending'),
         (1, 'Approved'),
@@ -27,7 +23,8 @@ class Post(models.Model):
     
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, 
                             editable=False)
-    slug = models.SlugField(max_length=256, null=False)
+    #implement unique slug field // to do 
+    slug = models.SlugField(max_length=256, unique=True, null=False)
     name = models.CharField(max_length=64, blank=False, null=False, 
                             validators=[MinLengthValidator(6)])
     price = models.DecimalField(max_digits=12, decimal_places=2, blank=False, 
@@ -36,6 +33,7 @@ class Post(models.Model):
                                 null=False)
     image = models.ImageField(upload_to='images/', blank=True, null=True)
     #bool integer // 1 - True // 0 - False // 2 - Pending(none bool)
+    #think about better way to implement this field // use cases
     is_approved = models.IntegerField(default=2, choices=status_choice)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
                              blank=False, null=False)
@@ -48,5 +46,6 @@ class Post(models.Model):
         return self.name
         
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)
+        slug = check_slug_unique(Post, slugify(self.name))
+        self.slug = slug
         return super(Post, self).save(*args, **kwargs)

@@ -9,14 +9,12 @@ from posts.mixins import GroupRequiredMixin
 
 # Create your views here.
 
-#List of items on entire marketplace
-#List of items approved on entire marketplace // to do
+#List of items approved on entire marketplace
 class HomeView(generic.ListView):
     model = Post
     template_name = 'posts/home_page.html'
     
     def get_queryset(self):
-        print(self.request.META.get('REMOTE_ADDR'))
         qs = super().get_queryset()
         return qs.filter(is_approved=1)
     
@@ -87,7 +85,6 @@ class UserPendingItemsView(LoginRequiredMixin, generic.ListView):
     
     def get_queryset(self):
         qs = super().get_queryset()
-        print(qs.filter(is_approved=2))
         return qs.filter(is_approved=2)
 
 
@@ -97,6 +94,11 @@ class UserItemsView(LoginRequiredMixin, generic.ListView):
     
     def get_queryset(self):
         qs = super().get_queryset()
-        print(self.request.user.id)
         return qs.filter(is_approved=1)
 
+
+class EditUserItemView(LoginRequiredMixin, edit.UpdateView):
+    model = Post
+    template_name = 'posts/user/edit_item.html'
+    fields = ['name', 'price', 'category', 'image']
+    

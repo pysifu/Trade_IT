@@ -8,6 +8,7 @@ urlpatterns = [
     path('create/post/', views.CreatePostView.as_view(), name='create_post'),
     path('post/<slug:slug>/', views.PostView.as_view(), name='post'),
     path('user/items/', views.UserItemsView.as_view(), name='user_items'),
+    path('user/item/edit/<slug:slug>/', views.EditUserItemView.as_view(), name='edit_item'),
     path('manage/items/pending/', views.ListManagePostsView.as_view(), name='panel_pendings'),
     path('manage/items/pending/<slug:slug>', views.EditPendingPostView.as_view(), name='panel_edit_pending'),
     path('manage/items/history/', views.HistoryManagePostsView.as_view(), name='panel_history'),

@@ -12,5 +12,9 @@
 {% if object.image %}
 <img src={% static object.image %}>
 {% endif %}
+<form method='post'>
+    {% csrf_token %}
+    <input type='submit' value='BUY'>
+</form>
 
 {% endblock content %}

@@ -1,6 +1,6 @@
 from django.core.exceptions import PermissionDenied
 
-#change group actually now is not necessary
+#does class name is still valid 
 class GroupRequiredMixin:
     group_required = None
     

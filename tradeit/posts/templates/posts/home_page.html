@@ -15,7 +15,7 @@
     <div class="row align-items-start">
     {% for object in object_list %}
         <div class="col">
-            <h2>{{object}}</h2>
+            <h2><a href="{% url 'posts:post' object.slug %}">{{object}}</a></h2>
             <h2>Price: {{object.price}}zł</h2>
             {% if object.image %}
                 <img src={% static object.image %}>
