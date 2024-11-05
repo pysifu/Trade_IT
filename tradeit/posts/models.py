@@ -4,9 +4,11 @@ from django.conf import settings
 from django.urls import reverse
 from django.template.defaultfilters import slugify
 import uuid
+from datetime import datetime
 from posts.validation import check_slug_unique
 # Create your models here.
 
+#add post time // to do 
 class Post(models.Model):
     categories = (
         ('cars', 'Cars'),
@@ -21,17 +23,15 @@ class Post(models.Model):
         (0, 'Denied'),
     )
     
-    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, 
-                            editable=False)
-    #implement unique slug field // to do 
-    slug = models.SlugField(max_length=256, unique=True, null=False)
     name = models.CharField(max_length=64, blank=False, null=False, 
                             validators=[MinLengthValidator(6)])
+    slug = models.SlugField(max_length=256, unique=True, null=False)
     price = models.DecimalField(max_digits=12, decimal_places=2, blank=False, 
                                 null=False, validators=[MinValueValidator(0.01)])
     category = models.CharField(max_length=16, choices=categories, blank=False,
                                 null=False)
-    image = models.ImageField(upload_to='images/', blank=True, null=True)
+    image = models.ImageField(upload_to='images/', blank=True, null=False)
+    post_created = models.DateTimeField(auto_now_add=True)
     #bool integer // 1 - True // 0 - False // 2 - Pending(none bool)
     #think about better way to implement this field // use cases
     is_approved = models.IntegerField(default=2, choices=status_choice)
@@ -49,3 +49,27 @@ class Post(models.Model):
         slug = check_slug_unique(Post, slugify(self.name))
         self.slug = slug
         return super(Post, self).save(*args, **kwargs)
+    
+    
+class Transaction(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4,
+                          editable=False)
+    name = models.CharField(max_length=128, blank=False, null=False,
+                            validators=[MinLengthValidator(6)])
+    slug = models.SlugField(unique=True)
+    price = models.DecimalField(max_digits=16, decimal_places=2,
+                                blank=False, null=False)
+    category = models.CharField(max_length=32, blank=False, null=False)
+    post_closed = models.DateTimeField(auto_now_add=True, null=False)
+    buyer = models.ForeignKey(settings.AUTH_USER_MODEL, 
+                              on_delete=models.SET_NULL, related_name='buyers', 
+                              blank=False, null=True)
+    seller = models.ForeignKey(settings.AUTH_USER_MODEL, 
+                               on_delete=models.SET_NULL, related_name='sellers',
+                               blank=False, null=True)
+    
+    
+    
+#signals 
+#create transaction // to do 
+#remove object Post, transaction works as history of deal

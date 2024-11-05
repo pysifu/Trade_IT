@@ -5,6 +5,7 @@ from django.contrib.auth.mixins import (
     LoginRequiredMixin, UserPassesTestMixin, PermissionRequiredMixin)
 from django.urls import reverse_lazy
 from django.shortcuts import render
+
 from posts.mixins import GroupRequiredMixin
 
 # Create your views here.
@@ -44,6 +45,7 @@ class PostView(LoginRequiredMixin, generic.DetailView):
 class ListManagePostsView(GroupRequiredMixin, generic.ListView):
     model = Post
     group_required = ['superuser', 'staff']
+    paginate_by = 10
     template_name = 'posts/panel_management/list.html'
     
     def get_queryset(self):
@@ -81,6 +83,7 @@ def my_items_view(request):
 
 class UserPendingItemsView(LoginRequiredMixin, generic.ListView):
     model = Post
+    paginate_by = 10
     template_name = 'posts/user/pending_items.html'
     
     def get_queryset(self):
