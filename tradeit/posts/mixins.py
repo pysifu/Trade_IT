@@ -11,6 +11,6 @@ class GroupRequiredMixin:
         if not request.user.is_authenticated:
             raise PermissionDenied
         
-        if not request.user.is_staff or not request.user.is_superuser:
+        if not (request.user.is_staff or request.user.is_superuser):
             raise PermissionDenied
         return super(GroupRequiredMixin, self).dispatch(request, *args, **kwargs)

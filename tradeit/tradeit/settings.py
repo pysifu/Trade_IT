@@ -83,10 +83,16 @@ WSGI_APPLICATION = 'tradeit.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
+        'NAME': 'db_tradeit',
         "OPTIONS": {
             "service": "my_service",
             "passfile": ".my_pgpass",
         },
+        'ATOMIC_REQUESTS': True,
+        'TEST': {
+            'NAME': 'test_db_tradeit',
+        },
+        
     }
 }
 
@@ -145,5 +151,5 @@ STATICFILES_DIRS = [
 AUTH_USER_MODEL = "users.User"
 
 
-LOGIN_URL = '/login/'
+LOGIN_URL = 'users:sign_in'
 LOGOUT_REDIRECT_URL = ''

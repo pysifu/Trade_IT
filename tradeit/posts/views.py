@@ -25,7 +25,7 @@ class CreatePostView(LoginRequiredMixin, edit.CreateView):
     model = Post
     template_name = 'posts/create_post.html'
     fields = ['name', 'price', 'category', 'image']
-    login_url = reverse_lazy('users:login')
+    
     
     
     def form_valid(self, form):
@@ -36,7 +36,7 @@ class CreatePostView(LoginRequiredMixin, edit.CreateView):
  
     
 #Detail about item
-class PostView(LoginRequiredMixin, generic.DetailView):
+class PostView(generic.DetailView):
     model = Post
     template_name = 'posts/post.html'
 
@@ -50,18 +50,19 @@ class ListManagePostsView(GroupRequiredMixin, generic.ListView):
     
     def get_queryset(self):
         qs = super().get_queryset()
-        return qs.filter(is_approved=2)
+        return qs.filter(is_approved=2).order_by('created')
 
   
 class HistoryManagePostsView(GroupRequiredMixin, generic.ListView):
       model = Post
-      group_required = ['staff', 'superuser', 'admin']
+      group_required = ['staff', 'superuser']
       template_name = 'posts/panel_management/history.html'
       
 
 #change label of is_approved // to do
-class EditPendingPostView(edit.UpdateView):
+class EditPendingPostView(GroupRequiredMixin, edit.UpdateView):
     model = Post
+    group_required = ['superuser', 'is_staff']
     template_name = 'posts/panel_management/pending.html'
     fields = ['is_approved']
     success_url = reverse_lazy('posts:panel_pendings')
@@ -88,7 +89,7 @@ class UserPendingItemsView(LoginRequiredMixin, generic.ListView):
     
     def get_queryset(self):
         qs = super().get_queryset()
-        return qs.filter(is_approved=2)
+        return qs.filter(is_approved=2).order_by('created')
 
 
 class UserItemsView(LoginRequiredMixin, generic.ListView):

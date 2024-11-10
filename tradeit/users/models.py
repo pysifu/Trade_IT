@@ -1,7 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.core.validators import MinLengthValidator
-import datetime
+from django.contrib.auth.management.commands.createsuperuser import (
+    Command as BaseCreateSuperuserCommand
+)
+from django.core.management import CommandError
+import getpass
 
 # Create your models here.
     
@@ -39,9 +43,8 @@ class User(AbstractUser):
     })
     
     objects = UserManager()
-    REQUIRED_FIELDS=['birthday', 'phone_number']
+    REQUIRED_FIELDS=['email', 'password', 'birthday', 'phone_number']
        
-
 
 
 

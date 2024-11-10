@@ -31,7 +31,7 @@ class Post(models.Model):
     category = models.CharField(max_length=16, choices=categories, blank=False,
                                 null=False)
     image = models.ImageField(upload_to='images/', blank=True, null=False)
-    post_created = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(auto_now_add=True)
     #bool integer // 1 - True // 0 - False // 2 - Pending(none bool)
     #think about better way to implement this field // use cases
     is_approved = models.IntegerField(default=2, choices=status_choice)
