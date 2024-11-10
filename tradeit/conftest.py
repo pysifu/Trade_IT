@@ -66,3 +66,4 @@ def user_test_instance(db):
         password='Testuser13!'
     )
     return instance
+
