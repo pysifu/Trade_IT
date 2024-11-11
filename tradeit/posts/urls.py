@@ -9,7 +9,7 @@ urlpatterns = [
     path('post/<slug:slug>/', views.PostView.as_view(), name='post'),
     path('user/items/', views.UserItemsView.as_view(), name='user_items'),
     path('user/item/edit/<slug:slug>/', views.EditUserItemView.as_view(), 
-         name='edit_item'),
+         name='user_edit_item'),
     path('user/items/pending/', views.UserPendingItemsView.as_view(), 
          name='user_pending_items'),
     path('manage/items/pending/', views.ListManagePostsView.as_view(), 

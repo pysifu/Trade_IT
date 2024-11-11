@@ -34,11 +34,13 @@ def test_post_status_and_check_retrieved_object_view(client,
     response = client.get(url)
     
     assert response.status_code == 200
-    assert 'TestObject' in response.content.decode()
+    assert 'Test Object' in response.content.decode()
     
 
 @pytest.mark.django_db
-def test_panel_denied_access_by_user_view(client, user_test_instance, post_test_instance):
+def test_panel_denied_access_by_user_view(client, 
+                                          user_test_instance, 
+                                          post_test_instance):
     '''
     Checks panel management view if access is denied for no authorized users
     '''

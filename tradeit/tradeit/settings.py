@@ -26,9 +26,9 @@ load_dotenv()
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
@@ -90,7 +90,7 @@ DATABASES = {
         },
         'ATOMIC_REQUESTS': True,
         'TEST': {
-            'NAME': 'test_db_tradeit',
+            'NAME': 'db_test_tradeit',
         },
         
     }
@@ -153,3 +153,4 @@ AUTH_USER_MODEL = "users.User"
 
 LOGIN_URL = 'users:sign_in'
 LOGOUT_REDIRECT_URL = ''
+

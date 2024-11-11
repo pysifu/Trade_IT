@@ -4,7 +4,7 @@ def check_slug_unique(model_class, slug):
     Checks if slug is unique otherwise function continues 
     adding random number untill is valid. 
     '''
-    is_not_unique = model_class.objects.filter(slug=slug)
+    is_not_unique = model_class.objects.filter(slug=slug).exists()
     if is_not_unique:
         slice_length = 0
         slug += '-'

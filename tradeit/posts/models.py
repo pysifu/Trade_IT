@@ -34,7 +34,7 @@ class Post(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     #bool integer // 1 - True // 0 - False // 2 - Pending(none bool)
     #think about better way to implement this field // use cases
-    is_approved = models.IntegerField(default=2, choices=status_choice)
+    status = models.IntegerField(default=2, choices=status_choice)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
                              blank=False, null=False)
     

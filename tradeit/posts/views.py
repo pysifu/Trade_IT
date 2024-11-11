@@ -1,23 +1,22 @@
 from django.views import generic
 from django.views.generic import edit
 from posts.models import Post
-from django.contrib.auth.mixins import (
-    LoginRequiredMixin, UserPassesTestMixin, PermissionRequiredMixin)
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from django.shortcuts import render
-
-from posts.mixins import GroupRequiredMixin
-
+from posts.mixins import SpecialGroupRequiredMixin
 # Create your views here.
 
-#List of items approved on entire marketplace
+
 class HomeView(generic.ListView):
+    '''
+    List approved items
+    '''
     model = Post
     template_name = 'posts/home_page.html'
     
     def get_queryset(self):
         qs = super().get_queryset()
-        return qs.filter(is_approved=1)
+        return qs.filter(status=1)
     
 
 #Create item by user // only authorized users.
@@ -26,8 +25,6 @@ class CreatePostView(LoginRequiredMixin, edit.CreateView):
     template_name = 'posts/create_post.html'
     fields = ['name', 'price', 'category', 'image']
     
-    
-    
     def form_valid(self, form):
         obj = form.save(commit=False)
         obj.user = self.request.user
@@ -35,51 +32,36 @@ class CreatePostView(LoginRequiredMixin, edit.CreateView):
         return super().form_valid(form)
  
     
-#Detail about item
 class PostView(generic.DetailView):
     model = Post
     template_name = 'posts/post.html'
 
-# Change forbidden 403 and others html
-# Add Mixins group users staff to be able to perform actions // + CBV
-class ListManagePostsView(GroupRequiredMixin, generic.ListView):
+
+class ListManagePostsView(SpecialGroupRequiredMixin, generic.ListView):
     model = Post
-    group_required = ['superuser', 'staff']
     paginate_by = 10
     template_name = 'posts/panel_management/list.html'
     
     def get_queryset(self):
         qs = super().get_queryset()
-        return qs.filter(is_approved=2).order_by('created')
+        return qs.filter(status=2).order_by('created')
 
   
-class HistoryManagePostsView(GroupRequiredMixin, generic.ListView):
+class HistoryManagePostsView(SpecialGroupRequiredMixin, generic.ListView):
       model = Post
-      group_required = ['staff', 'superuser']
       template_name = 'posts/panel_management/history.html'
       
 
-#change label of is_approved // to do
-class EditPendingPostView(GroupRequiredMixin, edit.UpdateView):
+class EditPendingPostView(SpecialGroupRequiredMixin, edit.UpdateView):
     model = Post
-    group_required = ['superuser', 'is_staff']
     template_name = 'posts/panel_management/pending.html'
-    fields = ['is_approved']
+    fields = ['status']
     success_url = reverse_lazy('posts:panel_pendings')
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['post'] = Post.objects.get(slug=self.object.slug)
         return context
-
-#change it to CBV // to do
-#List of items posted by user
-def my_items_view(request):
-    posts = Post.objects.filter(user=request.user)
-    context = {
-        'posts' : posts
-    }
-    return render(request, 'posts/user/items.html', context=context)
 
 
 class UserPendingItemsView(LoginRequiredMixin, generic.ListView):
@@ -89,7 +71,7 @@ class UserPendingItemsView(LoginRequiredMixin, generic.ListView):
     
     def get_queryset(self):
         qs = super().get_queryset()
-        return qs.filter(is_approved=2).order_by('created')
+        return qs.filter(status=2).order_by('created')
 
 
 class UserItemsView(LoginRequiredMixin, generic.ListView):
@@ -98,11 +80,18 @@ class UserItemsView(LoginRequiredMixin, generic.ListView):
     
     def get_queryset(self):
         qs = super().get_queryset()
-        return qs.filter(is_approved=1)
+        return qs.filter(status=1)
 
 
 class EditUserItemView(LoginRequiredMixin, edit.UpdateView):
     model = Post
     template_name = 'posts/user/edit_item.html'
     fields = ['name', 'price', 'category', 'image']
+    success_url = reverse_lazy('posts:user_pending_items')
+    
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        obj.status = 2
+        obj.save()
+        return super().form_valid(form)
     

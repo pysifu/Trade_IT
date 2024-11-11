@@ -8,7 +8,9 @@
 {% block content %}
 
 {% for pending_item in object_list %}
-    <h1>{{pending_item.name}}</h1>
+    <h1><a href="{% url 'posts:user_edit_item' pending_item.slug %}">
+        {{pending_item.name}}
+    </a></h1>
     <h2>{{pending_item.price}}zł</h2>
     {% if pending_item.image %}
     <img src={% static pending_item.image %}>
