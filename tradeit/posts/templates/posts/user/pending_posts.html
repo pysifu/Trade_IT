@@ -7,13 +7,13 @@
 
 {% block content %}
 
-{% for pending_item in object_list %}
-    <h1><a href="{% url 'posts:user_edit_item' pending_item.slug %}">
-        {{pending_item.name}}
+{% for pending_post in object_list %}
+    <h1><a href="{% url 'posts:user_edit_post' pending_post.slug %}">
+        {{pending_post.name}}
     </a></h1>
-    <h2>{{pending_item.price}}zł</h2>
-    {% if pending_item.image %}
-    <img src={% static pending_item.image %}>
+    <h2>{{pending_post.price}}zł</h2>
+    {% if pending_post.image %}
+    <img src={% static pending_post.image %}>
     <h1>------------</h1>
     {% endif %}
 {% endfor %}
